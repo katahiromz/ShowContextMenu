@@ -55,7 +55,7 @@ ShowContextMenu(HWND hwnd, LPCWSTR pszPath, POINT pt)
 
     HMENU hMenu = CreatePopupMenu();
 
-    hr = pContextMenu->QueryContextMenu(hMenu, 0, FCIDM_SHVIEWFIRST, FCIDM_SHVIEWLAST, 0);
+    hr = pContextMenu->QueryContext Menu(hMenu, 0, FCIDM_SHVIEWFIRST, FCIDM_SHVIEWLAST, CMF_NORMAL);
     if (FAILED(hr))
     {
         printf("IContextMenu::QueryContextMenu\n");
