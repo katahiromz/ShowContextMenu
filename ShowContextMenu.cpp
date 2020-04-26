@@ -20,7 +20,7 @@ HRESULT ExecuteCommand(HWND hwnd, IContextMenu *pContextMenu, UINT nCmd)
 }
 
 BOOL
-ShowContextMenu(HWND hwnd, LPCWSTR pszPath, POINT pt)
+ShowContextMenu(HWND hwnd, LPCWSTR pszPath, POINT pt, UINT uFlags = CMF_NORMAL)
 {
     HRESULT hr;
     IShellFolder *pFolder = NULL;
@@ -55,7 +55,7 @@ ShowContextMenu(HWND hwnd, LPCWSTR pszPath, POINT pt)
 
     HMENU hMenu = CreatePopupMenu();
 
-    hr = pContextMenu->QueryContext Menu(hMenu, 0, FCIDM_SHVIEWFIRST, FCIDM_SHVIEWLAST, CMF_NORMAL);
+    hr = pContextMenu->QueryContextMenu(hMenu, 0, FCIDM_SHVIEWFIRST, FCIDM_SHVIEWLAST, uFlags);
     if (FAILED(hr))
     {
         printf("IContextMenu::QueryContextMenu\n");
@@ -83,6 +83,9 @@ ShowContextMenu(HWND hwnd, LPCWSTR pszPath, POINT pt)
 
 BOOL OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
+    TCHAR szWinDir[MAX_PATH];
+    GetWindowsDirectory(szWinDir, MAX_PATH);
+    SetDlgItemText(hwnd, edt1, szWinDir);
     return TRUE;
 }
 
@@ -94,7 +97,7 @@ void OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
     {
     case IDOK:
         GetDlgItemTextW(hwnd, edt1, szText, MAX_PATH);
-        ShowContextMenu(hwnd, szText, pt);
+        ShowContextMenu(hwnd, szText, pt, CMF_EXPLORE | CMF_NODEFAULT);
         break;
     case IDCANCEL:
         EndDialog(hwnd, id);
