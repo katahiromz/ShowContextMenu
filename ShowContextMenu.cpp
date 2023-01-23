@@ -20,7 +20,7 @@ HRESULT ExecuteCommand(HWND hwnd, IContextMenu *pContextMenu, UINT nCmd)
 }
 
 BOOL
-ShowContextMenu(HWND hwnd, LPCWSTR pszPath, POINT pt, UINT uFlags = CMF_NORMAL)
+ShowContextMenu(HWND hwnd, LPCWSTR pszPath, POINT pt, UINT uFlags, LPRECT prc)
 {
     HRESULT hr;
     IShellFolder *pFolder = NULL;
@@ -64,7 +64,7 @@ ShowContextMenu(HWND hwnd, LPCWSTR pszPath, POINT pt, UINT uFlags = CMF_NORMAL)
 
     SetForegroundWindow(hwnd);
     UINT nID = TrackPopupMenu(hMenu, TPM_LEFTALIGN | TPM_RETURNCMD | TPM_RIGHTBUTTON,
-                              pt.x, pt.y, 0, hwnd, NULL);
+                              pt.x, pt.y, 0, hwnd, prc);
     printf("%d\n", nID);
 
     hr = ExecuteCommand(hwnd, pContextMenu, nID);
@@ -91,13 +91,24 @@ BOOL OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
 void OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
+    RECT rc;
+    GetWindowRect(GetDlgItem(hwnd, IDOK), &rc);
     WCHAR szText[MAX_PATH];
-    POINT pt = { GetSystemMetrics(SM_CXSCREEN) / 2, GetSystemMetrics(SM_CYSCREEN) / 2 };
+    POINT pt = { rc.right, rc.bottom };
+    UINT uFlags = 0;
+    if (IsDlgButtonChecked(hwnd, chx1) == BST_CHECKED)
+        uFlags |= CMF_NODEFAULT;
+    if (IsDlgButtonChecked(hwnd, chx2) == BST_CHECKED)
+        uFlags |= CMF_VERBSONLY;
+    if (IsDlgButtonChecked(hwnd, chx3) == BST_CHECKED)
+        uFlags |= CMF_NOVERBS;
+    if (IsDlgButtonChecked(hwnd, chx4) == BST_CHECKED)
+        uFlags |= CMF_EXPLORE;
     switch (id)
     {
     case IDOK:
         GetDlgItemTextW(hwnd, edt1, szText, MAX_PATH);
-        ShowContextMenu(hwnd, szText, pt, CMF_EXPLORE | CMF_NODEFAULT);
+        ShowContextMenu(hwnd, szText, pt, uFlags, &rc);
         break;
     case IDCANCEL:
         EndDialog(hwnd, id);

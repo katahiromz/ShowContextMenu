@@ -8,10 +8,6 @@
 #undef APSTUDIO_HIDDEN_SYMBOLS
 #pragma code_page(65001) // UTF-8
 
-#ifndef IDC_STATIC
-    #define IDC_STATIC (-1)
-#endif
-
 //////////////////////////////////////////////////////////////////////////////
 
 LANGUAGE LANG_ENGLISH, SUBLANG_DEFAULT
@@ -19,14 +15,17 @@ LANGUAGE LANG_ENGLISH, SUBLANG_DEFAULT
 //////////////////////////////////////////////////////////////////////////////
 // RT_DIALOG
 
-1 DIALOG 0, 0, 215, 135
+1 DIALOG 0, 0, 215, 133
 CAPTION "ShowContextMenu"
 STYLE DS_CENTER | DS_MODALFRAME | WS_POPUPWINDOW | WS_CAPTION
 FONT 9, "MS Shell Dlg"
 {
-    DEFPUSHBUTTON "OK", IDOK, 35, 115, 60, 14
-    PUSHBUTTON "Cancel", IDCANCEL, 115, 115, 60, 14
+    DEFPUSHBUTTON "Show", IDOK, 112, 69, 66, 48
     EDITTEXT edt1, 6, 22, 199, 14, ES_AUTOHSCROLL
+    AUTOCHECKBOX "CMF_NODEFAULT", chx1, 15, 45, 80, 15
+    AUTOCHECKBOX "CMF_VERBSONLY", chx2, 15, 65, 80, 15
+    AUTOCHECKBOX "CMF_NOVERBS", chx3, 15, 85, 80, 15
+    AUTOCHECKBOX "CMF_EXPLORE", chx4, 15, 105, 80, 15
 }
 
 //////////////////////////////////////////////////////////////////////////////
